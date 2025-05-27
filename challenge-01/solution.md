@@ -1,8 +1,8 @@
 # Solution Challenge 01
 
-Se implementó la solución en el archivo solution.php
-Se tiene una región para los test delimitado por REGION TEST - ENDREGION TEST
-Se uso metodo nativo de ordenamiento optimizando el uso de memoria y rapidez
+- Se implementó la solución en el archivo solution.php.
+- Se tiene una región para los test delimitado por REGION TEST - ENDREGION TEST.
+- Se uso metodo nativo de ordenamiento optimizando el uso de memoria y rapidez.
 
 # Pruebas
 
