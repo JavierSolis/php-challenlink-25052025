@@ -10,10 +10,9 @@
 
 ## Challenges
 
-- [Find the point](https://github.com/medlinkla/challenlink/tree/master/challenge-01)
-- [Don't iterate](https://github.com/medlinkla/challenlink/tree/master/challenge-02)
-- [Spaghetti code](https://github.com/medlinkla/challenlink/tree/master/challenge-03)
-
+- [Find the point](challenge-01)
+- [Don't iterate](challenge-02)
+- [Spaghetti code](hchallenge-03)
 
 ## Once you are finished
 
