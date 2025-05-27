@@ -1,85 +1,77 @@
 <?php
 
-/**
- * Retorna si es posible encontrar una combinación de $K en $N
- */
-function isPossibleFoundCombination($N, $K, $minLenCurrent) {
-    // Si la cadena K es mayor a la cadena N, no es posible que esté dentro
-    if (strlen($N) < strlen($K)) {
-        return false;
-    }
-    // Si la menor combinación es igual a la longitud de K, ya no es posible que sea menor
-    if ($minLenCurrent == strlen($K)) {
-        return false;
-    }
-    return true;
-}
-
-
-function removeFirst($string, $charToDelete) {
-    $position = strpos($string, $charToDelete);
-    if ($position !== false) {
-        return substr_replace($string, "", $position, 1);
-    } else {
-        return $string;
-    }
-}
-
-/**
- * Función recursiva que irá buscando la combinación en la cadena aún más pequeña
- * Condición de detenerse será:
- * - o la combinación ya no es posible de ser menor
- * - o la cadena ya es menor a la combinación buscada
- *
- * $N primera cadena donde se buscará la combinación mínima
- * $K la cadena que se buscará
- * $minCombination es el mínimo actual que se encontró
- *
- */
-function searchSmallCombination($N, $K, $minCombination) {
-    if (!isPossibleFoundCombination($N, $K, strlen($minCombination))) {
-        return $minCombination;
-    }
-
-    // Se inicia en -1 en caso no encuentre la subcadena
-    $lenCombination = PHP_INT_MAX;
-    $posInitial = -1;
-    $posEnd = -1;
-    // Flag para indicar que se encontró el primer caracter y iniciar los valores
-    $flagIsFirst = true;
-    // KCopy se usará para llevar la cuenta si la combinación tiene todos los caracteres de K
-    $kCopy = $K;
-    // Se itera buscando cada caracter en N y quitándolo de la copia de K, si K queda vacío se obtuvo toda la combinación
-    for ($indexN = 0; $indexN < strlen($N); $indexN++) {
-        $char = $N[$indexN];
-
-        if (str_contains($K, $char)) {
-            $kCopy = removeFirst($kCopy, $char);
-            if ($flagIsFirst) {
-                $flagIsFirst = false;
-                $posInitial = $indexN;
-            }
-        }
-
-        if (strlen($kCopy) < 1) {
-            $posEnd = $indexN;
-            $lenCombination = $posEnd - $posInitial + 1;
-            break;
-        }
-    }
-
-    // Se escoge la mínima combinación de la hallada vs la actual min
-    if ($posEnd != -1 && $lenCombination < strlen($minCombination)) {
-        $minCombination = substr($N, $posInitial, $lenCombination);
-    }
-
-    return searchSmallCombination(substr($N, 1), $K, $minCombination);
-}
-
 function noIterate($strArr)
 {
-    return searchSmallCombination($strArr[0], $strArr[1], $strArr[0]);
+    $N = $strArr[0]; // La cadena grande donde vamos a buscar la combinación
+    $K = $strArr[1]; // Los caracteres que debe contener nuestra subcadena mínima
+
+    $lenN = strlen($N);
+    $lenK = strlen($K);
+
+  
+    // Paso 1: Preparamos K - Creamos su contador de caracteres
+    // Contamos cuántas veces aparece cada caracter en K 
+    // esto lo usaremos para comparar si se cumple la consición
+    $kCharCounts = array_count_values(str_split($K));
+    // contador de cantidad de caracteres diferentes necesitamos, es mas barato de comparar
+    $requiredChars = count(array_keys($kCharCounts));
+
+    // Inicializamos nuestros contadores de control
+    $windowCharCounts = []; // Aquí contaremos los caracteres que están DENTRO de nuestra ventana actual
+    $matchedChars = 0;      // Nos dice cuántos caracteres de K ya hemos "encontrado" en la ventana
+    $minLength = PHP_INT_MAX; // La longitud más pequeña que hemos visto hasta ahora
+    $result = "";           // La subcadena más corta que cumple la condición
+
+    $left = 0; 
+
+    // Paso 2: El puntero 'right' comienza a ir a la derecha (agrandar la ventana)
+    for ($right = 0; $right < $lenN; $right++) {
+        $char = $N[$right];
+        // Registramos este caracter en el contador de la ventana
+        $windowCharCounts[$char] = ($windowCharCounts[$char] ?? 0) + 1;
+
+        // Si este caracter es uno que necesitamos de K...
+        // Y si su cantidad en la ventana ya llegó a la cantidad que pide K...
+        // ¡Entonces hemos "cubierto" uno de nuestros TIPOS de caracteres de K!
+        if (isset($kCharCounts[$char]) && $windowCharCounts[$char] === $kCharCounts[$char]) {
+            $matchedChars++;
+        }
+
+        // Paso 3: La ventana ya contiene todos los caracteres de K, cumple la condición, ahora toca achicar la ventana
+        // Este bucle se activa SÓLO si nuestra ventana actual ya tiene todos los tipos de caracteres necesarios de K
+        while ($matchedChars === $requiredChars) {
+            // Calculamos la longitud de la ventana actual (desde 'left' hasta 'right')
+            $currentWindowLength = $right - $left + 1;
+
+            // Si esta ventana es más pequeña que la mejor que hemos encontrado...
+            if ($currentWindowLength < $minLength) {
+                $minLength = $currentWindowLength; // Actualizamos la longitud mínima
+                $result = substr($N, $left, $minLength); // Y guardamos la subcadena
+            }
+
+            // Ahora intentamos ACHICAR la ventana desde la izquierda para ver si podemos hacerla aún más pequeña
+            $leftChar = $N[$left]; // El caracter que está a punto de salir de la ventana
+
+            // Disminuimos su conteo (porque ya no estará en la ventana)
+            // no nos preocupamos que no exista porque esta ventana es la que ya se recorrió
+            $windowCharCounts[$leftChar]--;
+
+            // Si KChar contiene ese caracter
+            // y Si el caracter que salió era uno que necesitábamos de K
+            // Y si al quitarlo, la cantidad de ese caracter en la ventana ya no cumple la condición
+            // entonces quitamos una caracter del match
+            if (isset($kCharCounts[$leftChar]) && $windowCharCounts[$leftChar] < $kCharCounts[$leftChar]) {
+                $matchedChars--;
+            }
+
+            $left++; // Movemos el puntero izquierdo, achicando la ventana
+        }
+    }
+
+    // Paso 4: Devolvemos la subcadena más pequeña que encontramos en todo el recorrido
+    return $result;
 }
+
 
 // keep this function call here
 echo noIterate(["ahffaksfajeeubsne", "jefaa"]);
@@ -114,5 +106,5 @@ function runTestSuit()
     assertEquals("aaffhkksemckelloe", noIterate(["aaffhkksemckelloe", "aaffhkksemckelloe"]));
 }
 // Descomentar para ejecutar los casos de prueba
-//runTestSuit();
+// runTestSuit();
 //ENDREGION test
