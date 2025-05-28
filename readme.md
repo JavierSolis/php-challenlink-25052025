@@ -10,9 +10,9 @@
 
 ## Challenges
 
-- [Find the point](challenge-01)
-- [Don't iterate](challenge-02)
-- [Spaghetti code](hchallenge-03)
+- [Find the point](challenge-01) ( [ ➡️ Ver solución](./challenge-01/solution.md) )
+- [Don't iterate](challenge-02) ( [ ➡️ Ver solución](./challenge-02/solution.md) )
+- [Spaghetti code](hchallenge-03) ( [ ➡️ Ver solución](./challenge-03/solution.md) )
 
 ## Once you are finished
 
