@@ -1,0 +1,18 @@
+# .gitpod.yml
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Instalar Dependencias
+    init: |
+      composer install
+    command: |
+      ./vendor/bin/kahlan
+
+ports:
+  - port: 8000
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - felixfbecker.php-debug

@@ -1,5 +1,7 @@
 # The Gilded Rose Kata
 
+# [ ➡️ Ver solución](solution.md)
+
 ## Setup
 
 This repository includes the initial setup for this Kata, including the specs.
@@ -31,11 +33,10 @@ We have recently signed a supplier of conjured items. This requires an update to
 
 "Conjured" items degrade in Quality twice as fast as normal items
 
-Just for clarification, an item can never have its Quality increase above 50, however "Sulfuras" 
+Just for clarification, an item can never have its Quality increase above 50, however "Sulfuras"
 is a legendary item and as such its Quality is 80 and it never alters.
 
 ## Challenge
 
 1. Refactor the monstrous code in the `GildedRose.php` class.
 2. Add a new item type, "Conjured". The specs for this item are commented out in the `GildedRoseSpec.php` file.
-
