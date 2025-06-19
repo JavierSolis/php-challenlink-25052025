@@ -1,4 +1,6 @@
-# Challenlink
+# Prueba técnica
+---
+# Challenge
 
 ## How you'll be assessed
 
@@ -14,7 +16,3 @@
 - [Don't iterate](challenge-02) ( [ ➡️ Ver solución](./challenge-02/solution.md) )
 - [Spaghetti code](hchallenge-03) ( [ ➡️ Ver solución](./challenge-03/solution.md) )
 
-## Once you are finished
-
-- Upload your solutions to a public repository in GitHub or a similar service.
-- Share your repository link with us by email to erick@medlink.la
